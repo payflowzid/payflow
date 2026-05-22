@@ -36,9 +36,9 @@ const PAYMENT_METHODS: PaymentMethodData[] = [
     name: "QRIS",
     logo: "https://lh3.googleusercontent.com/d/11A6mu61JPYuzcE1YgPcko8rrbxkA3KKr",
     instructions: "Scan QR Code di bawah ini untuk membayar",
-    qrCodeImage: "https://lh3.googleusercontent.com/d/11A6mu61JPYuzcE1YgPcko8rrbxkA3KKr", // Using the same logo as QR image for now, or a specific QR image if provided
-    accountNumber: "PAYFLOW-QRIS-8821",
-    accountName: "PAYFLOWZ DIGITAL",
+    qrCodeImage: "https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=00020101021126570011ID.DANA.WWW011893600915335415044002093541504400303UMI51440014ID.CO.QRIS.WWW0215ID10222268784480303UMI5204511153033605802ID5921ZID%20Digital%20Printing%206012Kab.%20Nganjuk6105644536304A08E",
+    accountNumber: "UMKM-ZID-DIGITAL",
+    accountName: "ZID DIGITAL PRINTING",
   },
   {
     id: "bri",
@@ -62,7 +62,15 @@ const PAYMENT_METHODS: PaymentMethodData[] = [
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Shopee.svg/1280px-Shopee.svg.png",
     instructions: "Transfer ke nomor ShopeePay berikut",
     accountNumber: "085724444964",
-    accountName: "A.N. RIZKY AJI K.",
+    accountName: "A.N. MOCHAMAD YEYEN S.",
+  },
+  {
+    id: "gopay",
+    name: "GoPay",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/8/86/Gopay_logo.svg",
+    instructions: "Transfer ke nomor GoPay berikut",
+    accountNumber: "085724444964",
+    accountName: "A.N. MOCHAMAD YEYEN S.",
   }
 ];
 
@@ -247,14 +255,21 @@ const PaymentDetail = ({ method, onBack }: { method: PaymentMethodData, onBack: 
       </div>
 
       {/* WhatsApp Button */}
-      <motion.button 
-        whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(34, 197, 94, 0.4)" }}
-        whileTap={{ scale: 0.98 }}
-        className="w-full py-4 rounded-xl bg-[#00E676] text-black font-black text-xs flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,230,118,0.3)] transition-all"
+      <a
+        href={`https://wa.me/6285724444964?text=Halo%20ZID%20DIGITAL%20PRINTING%2C%20saya%20ingin%20mengonfirmasi%20pembayaran%20via%20${encodeURIComponent(method.name)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block w-full"
       >
-        <MessageCircle className="w-4 h-4 fill-black" />
-        Konfirmasi Via WhatsApp
-      </motion.button>
+        <motion.button 
+          whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(34, 197, 94, 0.4)" }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full py-4 rounded-xl bg-[#00E676] text-black font-black text-xs flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,230,118,0.3)] transition-all cursor-pointer"
+        >
+          <MessageCircle className="w-4 h-4 fill-black" />
+          Konfirmasi Via WhatsApp
+        </motion.button>
+      </a>
     </div>
   );
 };
@@ -365,6 +380,10 @@ export default function App() {
                     />
                     <PaymentItem 
                       method={PAYMENT_METHODS.find(m => m.id === "shopee")!}
+                      onClick={setSelectedMethod}
+                    />
+                    <PaymentItem 
+                      method={PAYMENT_METHODS.find(m => m.id === "gopay")!}
                       onClick={setSelectedMethod}
                     />
                   </div>
