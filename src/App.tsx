@@ -11,12 +11,14 @@ import {
   CreditCard, 
   Wallet, 
   ShieldCheck, 
-  CircleDollarSign,
   ArrowLeft,
   Copy,
   Check,
   MessageCircle,
-  Download
+  Download,
+  Printer,
+  MapPin,
+  HelpCircle
 } from "lucide-react";
 
 interface PaymentMethodData {
@@ -281,23 +283,23 @@ const Header = () => (
       animate={{ opacity: 1, y: 0 }}
       className="w-12 h-12 bg-gradient-to-tr from-gold to-gold-light rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.2)] mb-3"
     >
-      <CircleDollarSign className="w-8 h-8 text-black" strokeWidth={1.5} />
+      <Printer className="w-7 h-7 text-black" strokeWidth={1.5} />
     </motion.div>
     <motion.h1 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.2 }}
-      className="text-xl font-bold tracking-tight text-white mb-0.5"
+      className="text-xl font-bold tracking-tight text-white mb-0.5 text-center uppercase"
     >
-      PAYFLOW<span className="text-gold">Z</span>
+      ZID <span className="text-gold">DIGITAL PRINTING</span>
     </motion.h1>
     <motion.p 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.3 }}
-      className="text-[9px] font-bold tracking-[0.2em] text-gold/60 uppercase"
+      className="text-[9px] font-bold tracking-[0.15em] text-gold/60 uppercase text-center"
     >
-      Premium Top-Up Experience
+      Portal Pembayaran Resmi Merchant
     </motion.p>
   </header>
 );
@@ -391,13 +393,20 @@ export default function App() {
               </div>
 
               {/* Footer Info */}
-              <footer className="mt-8 pt-6 border-t border-dark-border text-center">
-                <p className="text-[10px] text-gray-500 mb-1.5">
-                  Secure payment powered by PayFlowZ Encryption
+              <footer className="mt-8 pt-6 border-t border-white/5 text-center">
+                <p className="text-[10px] text-gray-500 mb-2 leading-relaxed">
+                  © 2026 ZID Digital Printing • Hak Cipta Dilindungi<br/>
+                  Layanan pembayaran mandiri pesanan cetak & merchandise
                 </p>
-                <div className="flex justify-center gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
-                  <span className="text-[9px] text-gray-400 uppercase tracking-widest">System Online</span>
+                <div className="flex flex-col items-center gap-2">
+                  <div className="flex items-center gap-1 text-[9px] text-gray-400">
+                    <MapPin className="w-3 h-3 text-gold" />
+                    <span>Kab. Nganjuk, Jawa Timur, Indonesia</span>
+                  </div>
+                  <div className="flex items-center justify-center gap-3 mt-1">
+                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+                    <span className="text-[9px] text-gray-400 uppercase tracking-widest">UMKM Terverifikasi</span>
+                  </div>
                 </div>
               </footer>
             </motion.div>
