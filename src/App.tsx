@@ -84,20 +84,32 @@ interface PaymentItemProps {
 
 const PaymentItem = ({ method, isLarge = false, onClick }: PaymentItemProps) => (
   <motion.div 
-    whileHover={{ scale: 1.01, backgroundColor: "rgba(255, 255, 255, 0.03)" }}
+    whileHover={{ scale: 1.02, boxShadow: "0 0 20px rgba(253, 230, 138, 0.4)" }}
     whileTap={{ scale: 0.98 }}
     onClick={() => onClick(method)}
-    className="flex items-center gap-3 p-2.5 mb-2 rounded-xl bg-black/40 border border-white/5 cursor-pointer transition-all duration-300 group active:bg-white/5"
+    className="flex items-center gap-4 p-3 mb-3 rounded-none bg-gradient-to-r from-[#d4af37] via-[#fbf5b7] to-[#aa7c11] border border-[#fbf5b7]/40 cursor-pointer shadow-[0_4px_15px_rgba(0,0,0,0.4)] transition-all duration-300 group relative overflow-hidden"
   >
-    <div className={`w-14 h-9 bg-white rounded-lg flex items-center justify-center overflow-hidden ${method.id === 'bri' ? 'p-0' : 'p-1.5'} shrink-0`}>
+    {/* Subtle gloss shine overlay effect */}
+    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
+    
+    <div className={`w-16 h-10 bg-white rounded-none flex items-center justify-center overflow-hidden ${method.id === 'bri' ? 'p-1' : 'p-2'} shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.2)]`}>
       <img 
         src={method.logo} 
         alt={method.name} 
-        className={`w-full h-full object-contain transition-transform duration-300 ${method.id === 'bri' ? 'scale-125' : ''} ${isLarge ? 'scale-150' : ''}`} 
+        className={`w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 ${method.id === 'bri' ? 'scale-110' : ''}`} 
         referrerPolicy="no-referrer" 
       />
     </div>
-    <span className="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors">{method.name}</span>
+    
+    <div className="flex-1 flex items-center justify-between">
+      <span className="text-xs font-black text-neutral-950 uppercase tracking-wider font-sans group-hover:text-black transition-colors">{method.name}</span>
+      <motion.div 
+        className="w-5 h-5 rounded-full bg-black/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+        whileHover={{ scale: 1.1 }}
+      >
+        <div className="w-1.5 h-1.5 border-t-2 border-r-2 border-neutral-900 rotate-45 ml-[1px]" />
+      </motion.div>
+    </div>
   </motion.div>
 );
 
@@ -110,14 +122,14 @@ interface AccordionProps {
 }
 
 const Accordion = ({ title, icon, isOpen, onToggle, children }: AccordionProps) => (
-  <div className="mb-3 rounded-xl border border-white/10 bg-[#1a1a1a] overflow-hidden shadow-xl">
+  <div className="mb-4 rounded-none border border-white/10 bg-black/45 overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.37)] backdrop-blur-[6px]">
     <button 
       onClick={onToggle}
       className="w-full flex items-center justify-between p-4 hover:bg-white/5 active:bg-white/10 transition-colors group"
     >
       <div className="flex items-center gap-3">
-        {icon && <div className="text-gold">{icon}</div>}
-        <span className="text-sm font-bold tracking-tight text-white">
+        {icon && <div className="text-[#fbf5b7]">{icon}</div>}
+        <span className="text-xs font-bold tracking-widest text-gray-200 uppercase">
           {title}
         </span>
       </div>
@@ -125,7 +137,7 @@ const Accordion = ({ title, icon, isOpen, onToggle, children }: AccordionProps) 
         animate={{ rotate: isOpen ? 180 : 0 }}
         transition={{ duration: 0.3 }}
       >
-        <ChevronDown className="w-4 h-4 text-gray-500 group-hover:text-white transition-colors" />
+        <ChevronDown className="w-4 h-4 text-gray-400 group-hover:text-[#fbf5b7] transition-colors" />
       </motion.div>
     </button>
     
@@ -135,7 +147,7 @@ const Accordion = ({ title, icon, isOpen, onToggle, children }: AccordionProps) 
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
         >
           <div className="px-4 pb-4">
             <div className="h-[1px] w-full bg-white/5 mb-4" />
@@ -159,27 +171,33 @@ const PaymentDetail = ({ method, onBack }: { method: PaymentMethodData, onBack: 
   };
 
   return (
-    <div className="relative max-w-lg mx-auto px-5 py-4">
+    <div className="relative max-w-lg mx-auto px-1 py-1">
       {/* Back Button */}
       <button 
         onClick={onBack}
-        className="flex items-center gap-2 text-gray-400 hover:text-white mb-4 py-1 transition-colors group active:scale-95"
+        className="flex items-center gap-2 text-amber-200/80 hover:text-white mb-5 py-1.5 px-3.5 rounded-none bg-white/5 border border-white/5 hover:border-amber-500/20 transition-all group active:scale-95"
       >
-        <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-        <span className="text-sm font-bold">Kembali</span>
+        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+        <span className="text-[10px] font-bold tracking-widest uppercase">Kembali</span>
       </button>
 
       {/* Payment Instruction Card */}
-      <div className="mb-4 rounded-2xl border border-white/10 bg-[#1a1a1a] p-5 shadow-2xl relative overflow-hidden">
+      <div className="mb-5 rounded-none border border-[#d4af37]/35 bg-black/45 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] backdrop-blur-xl relative overflow-hidden">
+        {/* Gold corner ornaments */}
+        <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-[#d4af37]/70 pointer-events-none" />
+        <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-[#d4af37]/70 pointer-events-none" />
+        <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-[#d4af37]/70 pointer-events-none" />
+        <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-[#d4af37]/70 pointer-events-none" />
+        
         {/* Subtle Pattern Overlay */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
         
         {method.id === 'qris' ? (
           <div className="flex flex-col items-center">
-            <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">QR CODE</h3>
-            <p className="text-[9px] text-gray-500 mb-6">{method.instructions}</p>
+            <h3 className="text-xs font-bold text-amber-200 uppercase tracking-[0.2em] mb-1">QR CODE</h3>
+            <p className="text-[10px] text-gray-400 mb-6 text-center">{method.instructions}</p>
             
-            <div className="bg-white p-3 rounded-xl mb-6 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+            <div className="bg-white p-4 rounded-none mb-6 shadow-[0_0_30px_rgba(255,255,255,0.15)] border-2 border-amber-300/30">
               <img 
                 src={method.qrCodeImage} 
                 alt="QR Code" 
@@ -189,57 +207,58 @@ const PaymentDetail = ({ method, onBack }: { method: PaymentMethodData, onBack: 
             </div>
 
             <button 
-              className="w-full py-3 rounded-full bg-white/5 border border-white/10 text-white font-bold text-[10px] flex items-center justify-center gap-2 hover:bg-white/10 transition-all active:scale-95"
+              className="w-full py-3.5 rounded-none bg-gradient-to-r from-[#d4af37] to-[#aa7c11] border border-amber-300/20 text-neutral-950 font-black text-xs flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.99] transition-all shadow-[0_4px_15px_rgba(212,175,55,0.2)]"
               onClick={() => window.open(method.qrCodeImage, '_blank')}
             >
-              <Download className="w-3.5 h-3.5" />
-              Simpan QR Code
+              <Download className="w-4 h-4" />
+              SIMPAN QR CODE
             </button>
           </div>
         ) : (
           <>
-            <div className="flex items-center gap-3 mb-6">
-              <div className={`w-14 h-9 bg-white rounded-lg flex items-center justify-center ${method.id === 'bri' ? 'p-0' : 'p-1.5'}`}>
+            <div className="flex items-center gap-4 mb-6 pb-4 border-b border-white/5">
+              <div className={`w-16 h-10 bg-white rounded-none flex items-center justify-center ${method.id === 'bri' ? 'p-1' : 'p-2'} shadow-md`}>
                 <img 
                   src={method.logo} 
                   alt={method.name} 
-                  className={`w-full h-full object-contain ${method.id === 'bri' ? 'scale-125' : ''}`} 
+                  className={`w-full h-full object-contain ${method.id === 'bri' ? 'scale-110' : ''}`} 
                   referrerPolicy="no-referrer" 
                 />
               </div>
               <div>
-                <h3 className="text-xs font-bold text-white uppercase tracking-wide">{method.name}</h3>
-                <p className="text-[10px] text-gray-500">{method.instructions}</p>
+                <h3 className="text-sm font-black text-white uppercase tracking-wider">{method.name}</h3>
+                <p className="text-[10px] text-gray-400">{method.instructions}</p>
               </div>
             </div>
 
-            <div className="bg-black/40 rounded-xl p-6 border border-white/5 text-center relative">
-              <p className="text-[9px] font-bold text-blue-400/70 uppercase tracking-[0.2em] mb-3">Nomor Rekening</p>
+            <div className="bg-black/40 rounded-none p-6 border border-white/5 text-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-b from-amber-500/[0.02] to-transparent pointer-events-none" />
+              <p className="text-[9px] font-black text-amber-200/70 uppercase tracking-[0.2em] mb-3">Nomor Rekening</p>
               <div className="flex items-center justify-center gap-2 mb-3">
-                <span className="text-xl font-bold text-[#00FF88] tracking-tight">{method.accountNumber}</span>
+                <span className="text-2xl font-black text-[#00FF88] tracking-tight">{method.accountNumber}</span>
                 <button 
                   onClick={handleCopy}
-                  className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all active:scale-95"
+                  className="p-2 rounded-none bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all active:scale-95 border border-white/5"
                 >
-                  {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                  {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
                 </button>
               </div>
-              <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">{method.accountName}</p>
+              <p className="text-xs font-extrabold text-white uppercase tracking-widest">{method.accountName}</p>
             </div>
           </>
         )}
 
-        <p className="mt-4 text-[9px] text-gray-500 text-center leading-relaxed px-4">
+        <p className="mt-5 text-[10px] text-gray-400 text-center leading-relaxed px-4">
           Pastikan nominal transfer sesuai dengan total tagihan pembayaran pesanan Anda.
         </p>
       </div>
 
       {/* Order Info Card */}
-      <div className="mb-6 rounded-2xl border border-white/10 bg-[#1a1a1a] p-5 shadow-xl relative overflow-hidden">
-        <h4 className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Informasi Pesanan</h4>
+      <div className="mb-5 rounded-none border border-[#d4af37]/20 bg-black/45 p-5 shadow-xl relative overflow-hidden backdrop-blur-md">
+        <h4 className="text-[9px] font-black text-amber-200/70 uppercase tracking-[0.2em] mb-4">Informasi Pesanan</h4>
         <div className="space-y-3">
           <div className="flex justify-between items-center">
-            <span className="text-[10px] text-gray-500 font-medium">Tanggal Pembayaran</span>
+            <span className="text-[10px] text-gray-400 font-medium">Tanggal Pembayaran</span>
             <span className="text-[10px] text-gray-200 font-bold">
               {new Intl.DateTimeFormat('id-ID', {
                 day: '2-digit',
@@ -250,8 +269,8 @@ const PaymentDetail = ({ method, onBack }: { method: PaymentMethodData, onBack: 
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-[10px] text-gray-500 font-medium">Metode Pembayaran</span>
-            <span className="text-[10px] text-gray-200 font-bold">{method.name}</span>
+            <span className="text-[10px] text-gray-400 font-medium">Metode Pembayaran</span>
+            <span className="text-[10px] text-[#00FF88] font-bold">{method.name}</span>
           </div>
         </div>
       </div>
@@ -266,10 +285,10 @@ const PaymentDetail = ({ method, onBack }: { method: PaymentMethodData, onBack: 
         <motion.button 
           whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(34, 197, 94, 0.4)" }}
           whileTap={{ scale: 0.98 }}
-          className="w-full py-4 rounded-xl bg-[#00E676] text-black font-black text-xs flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,230,118,0.3)] transition-all cursor-pointer"
+          className="w-full py-4 rounded-none bg-[#00E676] text-black font-black text-xs flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,230,118,0.3)] transition-all cursor-pointer hover:brightness-110"
         >
           <MessageCircle className="w-4 h-4 fill-black" />
-          Konfirmasi Via WhatsApp
+          KONFIRMASI VIA WHATSAPP
         </motion.button>
       </a>
     </div>
@@ -277,29 +296,46 @@ const PaymentDetail = ({ method, onBack }: { method: PaymentMethodData, onBack: 
 };
 
 const Header = () => (
-  <header className="flex flex-col items-center mb-6 pt-8">
-    <motion.div 
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="w-12 h-12 bg-gradient-to-tr from-gold to-gold-light rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.2)] mb-3"
-    >
-      <Printer className="w-7 h-7 text-black" strokeWidth={1.5} />
-    </motion.div>
-    <motion.h1 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.2 }}
-      className="text-xl font-bold tracking-tight text-white mb-0.5 text-center uppercase"
-    >
-      ZID <span className="text-gold">DIGITAL PRINTING</span>
-    </motion.h1>
+  <header className="flex flex-col items-center mb-8 pt-8">
+    <div className="flex flex-col items-center gap-4 justify-center mb-1">
+      {/* Official ZID Logo */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="w-24 h-24 flex items-center justify-center shrink-0"
+      >
+        <img 
+          src="https://www.image2url.com/r2/default/images/1783337065543-cd8a5e15-12ad-4c68-be79-bf18ede90446.png" 
+          alt="ZID Logo" 
+          className="w-full h-full object-contain"
+          referrerPolicy="no-referrer"
+        />
+      </motion.div>
+      
+      <motion.h1 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="text-3xl font-black tracking-tight text-white font-sans uppercase text-center"
+        style={{ 
+          textShadow: "1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0 4px 8px rgba(0,0,0,0.8)"
+        }}
+      >
+        ZID <span className="text-white relative">PAYFLOW</span>
+      </motion.h1>
+    </div>
+    
     <motion.p 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ delay: 0.3 }}
-      className="text-[9px] font-bold tracking-[0.15em] text-gold/60 uppercase text-center"
+      transition={{ delay: 0.2 }}
+      className="text-[9px] text-gray-100 leading-relaxed max-w-sm text-center px-2 mt-3 font-semibold border-t border-b border-white/10 py-2.5"
+      style={{ 
+        textShadow: "1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0 2px 4px rgba(0,0,0,0.9)"
+      }}
     >
-      Portal Pembayaran Resmi Merchant
+      <span className="font-extrabold text-red-500 uppercase tracking-widest block mb-0.5">Peringatan:</span>
+      Mohon lebih berhati-hati saat melakukan pembayaran dan selalu cek kembali nomor rekening tujuan sebelum ditransfer. Pembayaran resmi hanya dilakukan ke rekening dengan nama sesuai yang tertera di platform pembayaran. Segala bentuk kesalahan transfer di luar platform resmi bukan menjadi tanggung jawab kami.
     </motion.p>
   </header>
 );
@@ -317,14 +353,15 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-black font-sans selection:bg-gold/30 selection:text-gold select-none touch-manipulation">
-      {/* Background Glow Effects */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[10%] -left-[10%] w-[60%] h-[60%] bg-gold/5 blur-[100px] rounded-full" />
-        <div className="absolute -bottom-[10%] -right-[10%] w-[60%] h-[60%] bg-gold/5 blur-[100px] rounded-full" />
-      </div>
+    <div className="min-h-screen bg-[#0d0000] font-sans selection:bg-amber-500/30 selection:text-amber-200 select-none touch-manipulation relative overflow-x-hidden">
+      
+      {/* Background Image requested by user */}
+      <div 
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat z-0 pointer-events-none"
+        style={{ backgroundImage: `url('https://www.image2url.com/r2/default/images/1783336307730-2406c36b-27c2-4f0b-bb93-d568b8ac2099.avif')` }}
+      />
 
-      <div className="relative max-w-md mx-auto px-5">
+      <div className="relative max-w-md mx-auto px-5 z-10">
         <Header />
 
         <AnimatePresence mode="wait">
@@ -336,60 +373,72 @@ export default function App() {
               exit={{ opacity: 0, y: -10 }}
               className="pb-12"
             >
-              {/* Section Title */}
-              <div className="flex items-center gap-2 mb-4 px-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-gold" />
-                <h2 className="text-xs font-medium text-gray-400">Metode Pembayaran</h2>
-              </div>
+              {/* Main Frosted Glassmorphism Card */}
+              <div className="relative rounded-none border border-[#d4af37]/35 bg-black/45 p-5 shadow-[0_20px_50px_rgba(0,0,0,0.8)] backdrop-blur-xl overflow-hidden">
+                {/* Subtle internal gold gradient border highlight */}
+                <div className="absolute inset-0 border border-white/5 rounded-none pointer-events-none" />
+                
+                {/* Gold corner ornaments to match screenshot exactly */}
+                <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-[#d4af37]/70 pointer-events-none" />
+                <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-[#d4af37]/70 pointer-events-none" />
+                <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-[#d4af37]/70 pointer-events-none" />
+                <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-[#d4af37]/70 pointer-events-none" />
 
-              {/* Payment Methods */}
-              <div className="space-y-3">
-                <Accordion 
-                  title="QRIS" 
-                  icon={<QrCode className="w-4 h-4" />}
-                  isOpen={openSections.includes("qris")}
-                  onToggle={() => toggleSection("qris")}
-                >
-                  <PaymentItem 
-                    method={PAYMENT_METHODS.find(m => m.id === "qris")!}
-                    isLarge={true}
-                    onClick={setSelectedMethod}
-                  />
-                </Accordion>
+                {/* Section Title */}
+                <div className="flex items-center gap-2 mb-5 pb-3 border-b border-white/10 px-1">
+                  <ShieldCheck className="w-4 h-4 text-[#fbf5b7]" />
+                  <h2 className="text-xs font-bold tracking-wider text-amber-200 uppercase">Metode Pembayaran</h2>
+                </div>
 
-                <Accordion 
-                  title="Bank Transfer" 
-                  icon={<CreditCard className="w-4 h-4" />}
-                  isOpen={openSections.includes("bank")}
-                  onToggle={() => toggleSection("bank")}
-                >
-                  <PaymentItem 
-                    method={PAYMENT_METHODS.find(m => m.id === "bri")!}
-                    onClick={setSelectedMethod}
-                  />
-                </Accordion>
-
-                <Accordion 
-                  title="E-Wallet" 
-                  icon={<Wallet className="w-4 h-4" />}
-                  isOpen={openSections.includes("ewallet")}
-                  onToggle={() => toggleSection("ewallet")}
-                >
-                  <div className="space-y-1">
+                {/* Payment Methods */}
+                <div className="space-y-3">
+                  <Accordion 
+                    title="QRIS" 
+                    icon={<QrCode className="w-4 h-4" />}
+                    isOpen={openSections.includes("qris")}
+                    onToggle={() => toggleSection("qris")}
+                  >
                     <PaymentItem 
-                      method={PAYMENT_METHODS.find(m => m.id === "dana")!}
+                      method={PAYMENT_METHODS.find(m => m.id === "qris")!}
+                      isLarge={true}
                       onClick={setSelectedMethod}
                     />
+                  </Accordion>
+
+                  <Accordion 
+                    title="Bank Transfer" 
+                    icon={<CreditCard className="w-4 h-4" />}
+                    isOpen={openSections.includes("bank")}
+                    onToggle={() => toggleSection("bank")}
+                  >
                     <PaymentItem 
-                      method={PAYMENT_METHODS.find(m => m.id === "shopee")!}
+                      method={PAYMENT_METHODS.find(m => m.id === "bri")!}
                       onClick={setSelectedMethod}
                     />
-                    <PaymentItem 
-                      method={PAYMENT_METHODS.find(m => m.id === "gopay")!}
-                      onClick={setSelectedMethod}
-                    />
-                  </div>
-                </Accordion>
+                  </Accordion>
+
+                  <Accordion 
+                    title="E-Wallet" 
+                    icon={<Wallet className="w-4 h-4" />}
+                    isOpen={openSections.includes("ewallet")}
+                    onToggle={() => toggleSection("ewallet")}
+                  >
+                    <div className="space-y-1">
+                      <PaymentItem 
+                        method={PAYMENT_METHODS.find(m => m.id === "dana")!}
+                        onClick={setSelectedMethod}
+                      />
+                      <PaymentItem 
+                        method={PAYMENT_METHODS.find(m => m.id === "shopee")!}
+                        onClick={setSelectedMethod}
+                      />
+                      <PaymentItem 
+                        method={PAYMENT_METHODS.find(m => m.id === "gopay")!}
+                        onClick={setSelectedMethod}
+                      />
+                    </div>
+                  </Accordion>
+                </div>
               </div>
 
               {/* Footer Info */}
@@ -400,7 +449,7 @@ export default function App() {
                 </p>
                 <div className="flex flex-col items-center gap-2">
                   <div className="flex items-center gap-1 text-[9px] text-gray-400">
-                    <MapPin className="w-3 h-3 text-gold" />
+                    <MapPin className="w-3 h-3 text-amber-300" />
                     <span>Kab. Nganjuk, Jawa Timur, Indonesia</span>
                   </div>
                   <div className="flex items-center justify-center gap-3 mt-1">
