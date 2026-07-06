@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, type ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   ChevronDown, 
@@ -344,6 +344,48 @@ export default function App() {
   const [openSections, setOpenSections] = useState<string[]>(["qris", "bank", "ewallet"]);
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethodData | null>(null);
 
+  useEffect(() => {
+    // Preload all images (especially QRIS barcode) so they display instantly on click
+    PAYMENT_METHODS.forEach(method => {
+      const img = new Image();
+      img.src = method.logo;
+      if (method.qrCodeImage) {
+        const qrImg = new Image();
+        qrImg.src = method.qrCodeImage;
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    // Navigation routing based on URL hash
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (hash) {
+        const method = PAYMENT_METHODS.find(m => m.id === hash);
+        if (method) {
+          setSelectedMethod(method);
+        } else {
+          setSelectedMethod(null);
+        }
+      } else {
+        setSelectedMethod(null);
+      }
+    };
+
+    handleHashChange(); // Sync initial state
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
+  const handleSelectMethod = (method: PaymentMethodData) => {
+    window.location.hash = method.id;
+  };
+
+  const handleBack = () => {
+    window.location.hash = "";
+  };
+
   const toggleSection = (section: string) => {
     setOpenSections(prev => 
       prev.includes(section) 
@@ -401,7 +443,7 @@ export default function App() {
                     <PaymentItem 
                       method={PAYMENT_METHODS.find(m => m.id === "qris")!}
                       isLarge={true}
-                      onClick={setSelectedMethod}
+                      onClick={handleSelectMethod}
                     />
                   </Accordion>
 
@@ -413,7 +455,7 @@ export default function App() {
                   >
                     <PaymentItem 
                       method={PAYMENT_METHODS.find(m => m.id === "bri")!}
-                      onClick={setSelectedMethod}
+                      onClick={handleSelectMethod}
                     />
                   </Accordion>
 
@@ -426,15 +468,15 @@ export default function App() {
                     <div className="space-y-1">
                       <PaymentItem 
                         method={PAYMENT_METHODS.find(m => m.id === "dana")!}
-                        onClick={setSelectedMethod}
+                        onClick={handleSelectMethod}
                       />
                       <PaymentItem 
                         method={PAYMENT_METHODS.find(m => m.id === "shopee")!}
-                        onClick={setSelectedMethod}
+                        onClick={handleSelectMethod}
                       />
                       <PaymentItem 
                         method={PAYMENT_METHODS.find(m => m.id === "gopay")!}
-                        onClick={setSelectedMethod}
+                        onClick={handleSelectMethod}
                       />
                     </div>
                   </Accordion>
@@ -469,7 +511,7 @@ export default function App() {
             >
               <PaymentDetail 
                 method={selectedMethod} 
-                onBack={() => setSelectedMethod(null)} 
+                onBack={handleBack} 
               />
             </motion.div>
           )}

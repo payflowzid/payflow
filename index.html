@@ -4,6 +4,36 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ZID Payment</title>
+    <!-- Preconnect to external asset and font domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://www.image2url.com" crossorigin />
+    <link rel="preconnect" href="https://lh3.googleusercontent.com" crossorigin />
+    <link rel="preconnect" href="https://api.qrserver.com" crossorigin />
+
+    <!-- Preload Critical Above-The-Fold Assets -->
+    <link 
+      rel="preload" 
+      href="https://www.image2url.com/r2/default/images/1783336307730-2406c36b-27c2-4f0b-bb93-d568b8ac2099.avif" 
+      as="image" 
+      type="image/avif" 
+    />
+    <link 
+      rel="preload" 
+      href="https://www.image2url.com/r2/default/images/1783337065543-cd8a5e15-12ad-4c68-be79-bf18ede90446.png" 
+      as="image" 
+      type="image/png" 
+    />
+
+    <!-- Preload Payment Method Logos -->
+    <link rel="preload" href="https://lh3.googleusercontent.com/d/11A6mu61JPYuzcE1YgPcko8rrbxkA3KKr" as="image" />
+    <link rel="preload" href="https://lh3.googleusercontent.com/d/1UP1Rz_k1UdG4pS9FqLs6aue0XaiX713f" as="image" />
+    <link rel="preload" href="https://lh3.googleusercontent.com/d/1ZgbLkQfzqKzndlIyd_S_C4eY8D77KCh7" as="image" />
+    <link rel="preload" href="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Shopee.svg/1280px-Shopee.svg.png" as="image" />
+    <link rel="preload" href="https://upload.wikimedia.org/wikipedia/commons/8/86/Gopay_logo.svg" as="image" />
+
+    <!-- Preload QRIS Barcode Image directly so it appears instantly on demand -->
+    <link rel="preload" href="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=00020101021126570011ID.DANA.WWW011893600915335415044002093541504400303UMI51440014ID.CO.QRIS.WWW0215ID10222268784480303UMI5204511153033605802ID5921ZID%20Digital%20Printing%206012Kab.%20Nganjuk6105644536304A08E" as="image" />
   </head>
   <body>
     <div id="root"></div>
