@@ -92,11 +92,11 @@ const PaymentItem = ({ method, isLarge = false, onClick }: PaymentItemProps) => 
     {/* Subtle gloss shine overlay effect */}
     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
     
-    <div className={`w-16 h-10 bg-white rounded-none flex items-center justify-center overflow-hidden ${method.id === 'bri' ? 'p-1' : 'p-2'} shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.2)]`}>
+    <div className={`w-16 h-10 bg-white rounded-none flex items-center justify-center overflow-hidden ${method.id === 'bri' ? 'p-1' : method.id === 'qris' ? 'p-1' : 'p-2'} shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.2)]`}>
       <img 
         src={method.logo} 
         alt={method.name} 
-        className={`w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 ${method.id === 'bri' ? 'scale-110' : ''}`} 
+        className={`w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 ${method.id === 'bri' ? 'scale-110' : method.id === 'qris' ? 'scale-135' : ''}`} 
         referrerPolicy="no-referrer" 
       />
     </div>
