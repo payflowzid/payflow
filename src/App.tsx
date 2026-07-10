@@ -302,10 +302,10 @@ const Header = () => (
       <motion.div 
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-24 h-24 flex items-center justify-center shrink-0"
+        className="w-36 h-36 flex items-center justify-center shrink-0"
       >
         <img 
-          src="https://www.image2url.com/r2/default/images/1783337065543-cd8a5e15-12ad-4c68-be79-bf18ede90446.png" 
+          src="https://www.image2url.com/r2/default/images/1783689184472-29cf590e-a19d-4a90-889d-99ba6b83315e.png" 
           alt="ZID Logo" 
           className="w-full h-full object-contain"
           referrerPolicy="no-referrer"
@@ -316,7 +316,7 @@ const Header = () => (
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="text-3xl font-black tracking-tight text-white font-sans uppercase text-center"
+        className="text-5xl font-black tracking-tight text-white font-sans uppercase text-center"
         style={{ 
           textShadow: "1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0 4px 8px rgba(0,0,0,0.8)"
         }}
