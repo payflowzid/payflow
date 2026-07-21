@@ -159,8 +159,19 @@ const Accordion = ({ title, icon, isOpen, onToggle, children }: AccordionProps) 
   </div>
 );
 
-const PaymentDetail = ({ method, onBack }: { method: PaymentMethodData, onBack: () => void }) => {
+const PaymentDetail = ({ method: propMethod, onBack }: { method: PaymentMethodData | null, onBack: () => void }) => {
   const [copied, setCopied] = useState(false);
+  const [lastMethod, setLastMethod] = useState<PaymentMethodData | null>(propMethod);
+
+  useEffect(() => {
+    if (propMethod) {
+      setLastMethod(propMethod);
+    }
+  }, [propMethod]);
+
+  const method = propMethod || lastMethod;
+
+  if (!method) return null;
 
   const handleCopy = () => {
     if (method.accountNumber) {
