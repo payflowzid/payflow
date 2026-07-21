@@ -164,9 +164,44 @@ const PaymentDetail = ({ method, onBack }: { method: PaymentMethodData, onBack: 
 
   const handleCopy = () => {
     if (method.accountNumber) {
-      navigator.clipboard.writeText(method.accountNumber);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(method.accountNumber)
+            .then(() => {
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2000);
+            })
+            .catch(() => {
+              // Fallback if writeText fails (e.g. inside constrained webview iframe)
+              fallbackCopy(method.accountNumber!);
+            });
+        } else {
+          fallbackCopy(method.accountNumber);
+        }
+      } catch (err) {
+        fallbackCopy(method.accountNumber);
+      }
+    }
+  };
+
+  const fallbackCopy = (text: string) => {
+    try {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.left = "-9999px";
+      textarea.style.top = "0";
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      const successful = document.execCommand("copy");
+      document.body.removeChild(textarea);
+      if (successful) {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } catch (err) {
+      console.error("Gagal menyalin teks: ", err);
     }
   };
 
@@ -197,7 +232,7 @@ const PaymentDetail = ({ method, onBack }: { method: PaymentMethodData, onBack: 
             <h3 className="text-xs font-bold text-amber-200 uppercase tracking-[0.2em] mb-1">QR CODE</h3>
             <p className="text-[10px] text-gray-400 mb-6 text-center">{method.instructions}</p>
             
-            <div className="bg-white p-4 rounded-none mb-6 shadow-[0_0_30px_rgba(255,255,255,0.15)] border-2 border-amber-300/30">
+            <div className="bg-white p-4 rounded-none mb-4 shadow-[0_0_30px_rgba(255,255,255,0.15)] border-2 border-amber-300/30">
               <img 
                 src={method.qrCodeImage} 
                 alt="QR Code" 
@@ -206,6 +241,10 @@ const PaymentDetail = ({ method, onBack }: { method: PaymentMethodData, onBack: 
               />
             </div>
 
+            <p className="text-[9px] text-gray-400 text-center mb-5 leading-relaxed italic max-w-[240px]">
+              Tip: Tekan lama gambar QR Code di atas untuk menyimpannya langsung ke galeri ponsel Anda.
+            </p>
+            
             <button 
               className="w-full py-3.5 rounded-none bg-gradient-to-r from-[#d4af37] to-[#aa7c11] border border-amber-300/20 text-neutral-950 font-black text-xs flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.99] transition-all shadow-[0_4px_15px_rgba(212,175,55,0.2)]"
               onClick={() => window.open(method.qrCodeImage, '_blank')}
@@ -370,20 +409,41 @@ export default function App() {
       } else {
         setSelectedMethod(null);
       }
+      // Ensure smooth and instant scroll reset on navigation change
+      window.scrollTo({ top: 0, behavior: "instant" });
     };
 
     handleHashChange(); // Sync initial state
 
     window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
+    window.addEventListener("popstate", handleHashChange);
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+      window.removeEventListener("popstate", handleHashChange);
+    };
   }, []);
 
   const handleSelectMethod = (method: PaymentMethodData) => {
+    setSelectedMethod(method);
     window.location.hash = method.id;
+    window.scrollTo({ top: 0, behavior: "instant" });
   };
 
   const handleBack = () => {
-    window.location.hash = "";
+    setSelectedMethod(null);
+    if (window.location.hash) {
+      try {
+        // Cleanly clear hash from the URL so there's no trailing #
+        window.history.pushState(
+          "",
+          document.title,
+          window.location.pathname + window.location.search
+        );
+      } catch (e) {
+        window.location.hash = "";
+      }
+    }
+    window.scrollTo({ top: 0, behavior: "instant" });
   };
 
   const toggleSection = (section: string) => {
